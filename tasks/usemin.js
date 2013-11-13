@@ -119,22 +119,27 @@ module.exports = function (grunt) {
     // var locator = options.revmap ? grunt.file.readJSON(options.revmap) : function (p) { return grunt.file.expand({filter: 'isFile'}, p); };
     var locator = getLocator(grunt, options);
     var revvedfinder = new RevvedFinder(locator);
-    var handler = new FileProcessor(patterns, revvedfinder, function (msg) { grunt.log.writeln(msg);});
+    var handler = new FileProcessor(patterns, revvedfinder, function (msg) { grunt.verbose.writeln(msg);});
+
+    var processed = 0;
 
     this.files.forEach(function (fileObj) {
       var files = grunt.file.expand({nonull: true}, fileObj.src);
       files.forEach(function (filename) {
         debug('looking at file %s', filename);
 
-        grunt.log.subhead('Processing as ' + options.type.toUpperCase() + ' - ' + filename);
+        grunt.verbose.subhead('Processing as ' + options.type.toUpperCase() + ' - ' + filename);
 
         // Our revved version locator
         var content = handler.process(filename, options.assetsDirs);
 
         // write the new content to disk
         grunt.file.write(filename, content);
+        processed++;
       });
     });
+
+    grunt.log.ok(processed + ' ' + (processed === 1 ? 'file' : 'files') + ' processed.');
   });
 
   grunt.registerMultiTask('useminPrepare', 'Using HTML markup as the primary source of information', function () {
@@ -176,10 +181,12 @@ module.exports = function (grunt) {
 
     });
 
+    grunt.log.ok('usemin prepped and ready');
+
     // log a bit what was added to config
-    grunt.log.subhead('Configuration is now:');
+    grunt.verbose.subhead('Configuration is now:');
     _.each(cfgNames, function(name) {
-      grunt.log.subhead('  ' + name + ':').writeln('  ' + inspect(grunt.config(name)));
+      grunt.verbose.subhead('  ' + name + ':').writeln('  ' + inspect(grunt.config(name)));
     });
   });
 };
