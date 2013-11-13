@@ -1,8 +1,14 @@
 {
   "name": "grunt-usemin",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "license": "BSD",
   "author": "The Yeoman Team",
+  "contributers": [
+    {
+      "name": "Anthony Castle",
+      "email": "acastle@gmail.com"
+    }
+  ],
   "description": "Replaces references to non-optimized scripts or stylesheets into a set of HTML files (or any templates/views).",
   "keywords": [
     "gruntplugin",
